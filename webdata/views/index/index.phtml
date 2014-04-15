@@ -1,4 +1,5 @@
 <?= $this->partial('/common/header.phtml', $this) ?>
+API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code>
 <ol>
     <?php foreach (Table::search(1) as $table) {?>
     <li><a href="/table/show/<?= $table->id ?>"><?= $this->escape(json_decode($table->meta)->file) ?></a></li>
