@@ -1,0 +1,7 @@
+<?= $this->partial('/common/header.phtml', $this) ?>
+<ol>
+    <?php foreach (Table::search(1) as $table) {?>
+    <li><a href="/table/show/<?= $table->id ?>"><?= $this->escape(json_decode($table->meta)->file) ?></a></li>
+    <?php } ?>
+</ol>
+<?= $this->partial('/common/footer.phtml', $this) ?>
