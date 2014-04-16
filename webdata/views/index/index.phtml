@@ -2,7 +2,17 @@
 API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code>
 <ol>
     <?php foreach (Table::search(1) as $table) {?>
-    <li><a href="/table/show/<?= $table->id ?>"><?= $this->escape(json_decode($table->meta)->file) ?></a></li>
+    <?php $file = json_decode($table->meta)->file ?>
+    <?php if ($file != $last_file) { ?>
+        <?php if (!is_null($last_file)) {?>
+            </ul>
+        </li>
+        <?php } ?>
+        <li><?= $this->escape($file) ?>
+            <ul>
+    <?php } ?>
+    <?php $last_file = $file ?>
+    <li><a href="/table/show/<?= $table->id ?>">第 <?= 1 + intval(json_decode($table->meta)->page) ?> 頁</a></li>
     <?php } ?>
 </ol>
 <?= $this->partial('/common/footer.phtml', $this) ?>
