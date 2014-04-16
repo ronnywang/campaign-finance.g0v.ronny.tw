@@ -1,18 +1,13 @@
 <?= $this->partial('/common/header.phtml', $this) ?>
 API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code>
 <ol>
-    <?php foreach (Table::search(1) as $table) {?>
-    <?php $file = json_decode($table->meta)->file ?>
-    <?php if ($file != $last_file) { ?>
-        <?php if (!is_null($last_file)) {?>
-            </ul>
-        </li>
-        <?php } ?>
+    <?php foreach (Table::getGroupedTables() as $file => $file_tables) { ?>
         <li><?= $this->escape($file) ?>
-            <ul>
-    <?php } ?>
-    <?php $last_file = $file ?>
-    <li><a href="/table/show/<?= $table->id ?>">第 <?= 1 + intval(json_decode($table->meta)->page) ?> 頁</a></li>
+        <ul>
+            <?php foreach ($file_tables as $page => $table) { ?>
+            <li><a href="/table/show/<?= $table->id ?>">第 <?= 1 + intval(json_decode($table->meta)->page) ?> 頁</a></li>
+            <?php } ?>
+        </ul>
     <?php } ?>
 </ol>
 <?= $this->partial('/common/footer.phtml', $this) ?>
