@@ -1,0 +1,26 @@
+<?= $this->partial('/common/header.phtml', $this) ?>
+API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code><br>
+檔案名稱: <?= $this->escape($this->table_meta->file) ?><br>
+頁數: <?= intval($this->table_meta->page) + 1 ?><br>
+
+格子圖片網址: <code id="cell-pic-url" data-template="http://<?= $_SERVER['HTTP_HOST'] ?>/api/getcellimage/<?= $this->table->id ?>/{row}/{col}.png">http://<?= $_SERVER['HTTP_HOST'] ?>/api/getcellimage/<?= $this->table->id ?>/第幾行/第幾列.png</code><br>
+<img id="cell-pic">
+
+<table class="table-bordered table">
+    <?php for ($i = 0; $i < count($this->tables->cross_points[0]) - 1; $i ++) { ?>
+    <tr>
+        <?php for ($j = 0; $j < count($this->tables->cross_points) - 1; $j ++) { ?>
+        <td><button class="cell" data-row="<?= $i + 1 ?>" data-col="<?= $j + 1 ?>">(<?= $i + 1 ?>, <?= $j + 1 ?>)</button></td>
+        <?php } ?>
+    </tr>
+    <?php } ?>
+</table>
+<script>
+$('.cell').click(function(e){
+    e.preventDefault();
+    $('#cell-pic-url').text($('#cell-pic-url').data('template').replace('{row}', $(this).data('row')).replace('{col}', $(this).data('col')));
+    $('#cell-pic').attr('src', $('#cell-pic-url').text());
+
+});
+</script>
+<?= $this->partial('/common/footer.phtml', $this) ?>
