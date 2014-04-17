@@ -37,7 +37,7 @@ class ApiController extends Pix_Controller
                 );
             }
         }
-
+        return $this->jsonp($ret, $_GET['callback']);
     }
 
 

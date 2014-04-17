@@ -1,5 +1,5 @@
 <?= $this->partial('/common/header.phtml', $this) ?>
-API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code><br>
+API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/tables/<?= $this->table->id ?></code><br>
 檔案名稱: <?= $this->escape($this->table_meta->file) ?><br>
 頁數: <?= intval($this->table_meta->page) + 1 ?><br>
 
