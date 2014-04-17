@@ -38,6 +38,11 @@ class ApiController extends Pix_Controller
             $curl = curl_init($meta->pic_url);
             curl_setopt($curl, CURLOPT_FILE, $fp);
             curl_exec($curl);
+            $info = curl_getinfo($curl);
+            if (200 !== $info['http_code']) {
+                unlink($path);
+                return $this->jsonp(array('error' => true, 'message' => '下載原始照片失敗'), $_GET['callback']);
+            }
         }
 
         if (preg_match('#\.jpe?g#', $meta->pic_url)) {
