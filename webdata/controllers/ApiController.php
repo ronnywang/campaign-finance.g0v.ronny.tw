@@ -33,7 +33,7 @@ class ApiController extends Pix_Controller
             $ret->data->tables[$i] = array();
             for ($j = 0; $j < count($tables->cross_points) - 1; $j ++) {
                 $ret->data->tables[$i][$j] = array(
-                    'cell_image_url' => "http://{$_SERVER['HTTP_HOST']}/api/getcellimage/" . ($i + 1) . "/" . ($j + 1) . ".png",
+                    'cell_image_url' => "http://{$_SERVER['HTTP_HOST']}/api/getcellimage/{$table->id}/" . ($i + 1) . "/" . ($j + 1) . ".png",
                 );
             }
         }
