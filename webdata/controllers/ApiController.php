@@ -17,6 +17,24 @@ class ApiController extends Pix_Controller
         return $this->jsonp($ret, $_GET['callback']);
     }
 
+    public function reverseAction()
+    {
+        list(, /*api*/, /*reverse*/, $id, $from) = explode('/', $this->getURI());
+
+        if ($from != 'ronnywang-awdQsV') {
+            return;
+        }
+
+        if (!$table = Table::find(intval($id))) {
+            return $this->jsonp(array('error' => true, 'message' => "找不到 {$id} 這個表格"), $_GET['callback']);
+        }
+
+        $meta = json_decode($table->meta);
+        $meta->reverse = true;
+        $table->update(array('meta' => json_encode($meta)));
+        return $this->json(1);
+    }
+
     public function tablesAction()
     {
         list(, /*api*/, /*tables*/, $id) = explode('/', $this->getURI());
