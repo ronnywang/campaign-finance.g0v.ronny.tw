@@ -98,6 +98,10 @@ class ApiController extends Pix_Controller
             return $this->jsonp(array('error' => true, 'message' => "找不到的圖片類型"), $_GET['allb']);
         }
 
+        if ($meta->reverse) {
+            $gd = imagerotate($gd, 180, 0);
+        }
+
         $croped = imagecrop($gd, array(
             'x' => $left_top[0],
             'y' => $left_top[1],
