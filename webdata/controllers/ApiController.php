@@ -8,11 +8,38 @@ class ApiController extends Pix_Controller
         $ret->error = 0;
         $ret->data = array();
         foreach (Table::search(1) as $table) {
-            $ret->data[] = json_decode($table->meta);
+            $table_data = json_decode($table->meta);
+            $table_data->id = $table->id;
+            $table_data->tables_api_url = 'http://' . $_SERVER['HTTP_HOST'] . '/api/tables/' . $table->id;
+            $ret->data[] = $table_data;
         }
 
         return $this->jsonp($ret, $_GET['callback']);
     }
+
+    public function tablesAction()
+    {
+        list(, /*api*/, /*tables*/, $id) = explode('/', $this->getURI());
+        if (!$table = Table::find(intval($id))) {
+            return $this->jsonp(array('error' => true, 'message' => "找不到 {$id} 這個表格"), $_GET['callback']);
+        }
+
+        $ret = new StdClass;
+        $ret->data = new StdClass;
+        $ret->data->meta = json_decode($table->meta);
+        $tables = json_decode($table->tables);
+        $ret->data->tables = array();
+        for ($i = 0; $i < count($tables->cross_points[0]) - 1; $i ++) {
+            $ret->data->tables[$i] = array();
+            for ($j = 0; $j < count($tables->cross_points) - 1; $j ++) {
+                $ret->data->tables[$i][$j] = array(
+                    'cell_image_url' => "http://{$_SERVER['HTTP_HOST']}/api/getcellimage/" . ($i + 1) . "/" . ($j + 1) . ".png",
+                );
+            }
+        }
+
+    }
+
 
     public function getcellimageAction()
     {
