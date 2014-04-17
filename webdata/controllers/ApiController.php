@@ -68,7 +68,13 @@ class ApiController extends Pix_Controller
             return $this->jsonp(array('error' => true, 'message' => "找不到 {$table_id} 這個表格"), $_GET['callback']);
         }
 
+        $meta = json_decode($table->meta);
         $tables = json_decode($table->tables);
+        if ($meta->reverse) {
+            $col = count($tables->cross_points) - intval($col);
+            $row = count($tables->cross_points[0]) - $row;
+        }
+
         $left_top = $tables->cross_points[$col - 1][$row - 1];
         $right_down = $tables->cross_points[$col][$row];
 
@@ -77,7 +83,6 @@ class ApiController extends Pix_Controller
         }
 
         $path = '/tmp/image-campaign-' . $table->id;
-        $meta = json_decode($table->meta);
         if (!file_exists($path) or !filesize($path)) {
             $fp = fopen($path, 'w');
             $curl = curl_init($meta->pic_url);
@@ -98,9 +103,6 @@ class ApiController extends Pix_Controller
             return $this->jsonp(array('error' => true, 'message' => "找不到的圖片類型"), $_GET['allb']);
         }
 
-        if ($meta->reverse) {
-            $gd = imagerotate($gd, 180, 0);
-        }
 
         $croped = imagecrop($gd, array(
             'x' => $left_top[0],
@@ -108,6 +110,9 @@ class ApiController extends Pix_Controller
             'width' => $right_down[0] - $left_top[0],
             'height' => $right_down[1] - $left_top[1],
         ));
+        if ($meta->reverse) {
+            $croped = imagerotate($croped, 180, 0);
+        }
         if ($type == 'png') {
             header('Content-Type: image/png');
             imagepng($croped);
