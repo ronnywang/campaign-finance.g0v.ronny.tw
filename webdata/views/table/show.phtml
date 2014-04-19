@@ -17,9 +17,11 @@ API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/tables/<?= $this->tab
         <?php for ($j = 0; $j < count($this->tables->cross_points) - 1; $j ++) { ?>
         <td>
             <button class="cell" data-row="<?= $i + 1 ?>" data-col="<?= $j + 1 ?>">(<?= $i + 1 ?>, <?= $j + 1 ?>)</button>
+            <span id="val-<?= $i + 1 ?>-<?= $j + 1 ?>">
             <?php if ($i == 0) { ?>
             <?= $this->escape($list[$j]) ?>
             <?php } ?>
+            </span>
         </td>
         <?php } ?>
     </tr>
@@ -32,5 +34,11 @@ $('.cell').click(function(e){
     $('#cell-pic').attr('src', $('#cell-pic-url').text());
 
 });
+
+$.get('http://campaign-finance.g0v.ctiml.tw/api/getcells/<?= $this->table->id ?>', function(ret){
+    for (var i = 0; i < ret.length; i ++) {
+        $('#val-' + ret[i].x + '-' + ret[i].y).text(ret[i].ans);
+    }
+}, 'jsonp');
 </script>
 <?= $this->partial('/common/footer.phtml', $this) ?>
