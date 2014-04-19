@@ -49,8 +49,8 @@ class ApiController extends Pix_Controller
         list($col, $type) = explode('.', $col);
 
         $table_id = intval($table_id);
-        $col = intval($col);
-        $row = intval($row);
+        $col = intval($col) - 1;
+        $row = intval($row) - 1;
 
         return $this->redirect("http://campaign-finance-pic.ronny.tw/{$table_id}/{$row}-{$col}.png");
     }
