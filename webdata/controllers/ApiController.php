@@ -66,64 +66,10 @@ class ApiController extends Pix_Controller
         list(, /*api*/, /*getcellimage*/, $table_id, $row, $col) = explode('/', $this->getURI());
         list($col, $type) = explode('.', $col);
 
-        if (!$table = Table::find(intval($table_id))) {
-            return $this->jsonp(array('error' => true, 'message' => "找不到 {$table_id} 這個表格"), $_GET['callback']);
-        }
+        $table_id = intval($table_id);
+        $col = intval($col);
+        $row = intval($row);
 
-        $meta = json_decode($table->meta);
-        $tables = json_decode($table->tables);
-        if ($meta->reverse) {
-            $col = count($tables->cross_points) - intval($col);
-            $row = count($tables->cross_points[0]) - $row;
-        }
-
-        $left_top = $tables->cross_points[$col - 1][$row - 1];
-        $right_down = $tables->cross_points[$col][$row];
-
-        if (!$left_top or !$right_down) {
-            return $this->jsonp(array('error' => true, 'message' => "row 或是 col 不正確不存在"), $_GET['callback']);
-        }
-
-        $path = '/tmp/image-campaign-' . $table->id;
-        if (!file_exists($path) or !filesize($path)) {
-            $fp = fopen($path, 'w');
-            $curl = curl_init($meta->pic_url);
-            curl_setopt($curl, CURLOPT_FILE, $fp);
-            curl_exec($curl);
-            $info = curl_getinfo($curl);
-            if (200 !== $info['http_code']) {
-                unlink($path);
-                return $this->jsonp(array('error' => true, 'message' => '下載原始照片失敗'), $_GET['callback']);
-            }
-        }
-
-        if (preg_match('#\.jpe?g#', $meta->pic_url)) {
-            $gd = imagecreatefromjpeg($path);
-        } elseif (preg_match('#\.png#', $meta->pic_url)) {
-            $gd = imagecreatefrompng($path);
-        } else {
-            return $this->jsonp(array('error' => true, 'message' => "找不到的圖片類型"), $_GET['allb']);
-        }
-
-
-        $croped = imagecrop($gd, array(
-            'x' => $left_top[0],
-            'y' => $left_top[1],
-            'width' => $right_down[0] - $left_top[0],
-            'height' => $right_down[1] - $left_top[1],
-        ));
-        if ($meta->reverse) {
-            $croped = imagerotate($croped, 180, 0);
-        }
-        if ($type == 'png') {
-            header('Content-Type: image/png');
-            imagepng($croped);
-        } elseif ($type == 'jpg') {
-            header('Content-Type: image/jpeg');
-            imagejpeg($croped);
-        } else {
-            return $this->jsonp(array('error' => true, 'message' => "只支援 png 和 jpg"), $_GET['allb']);
-        }
-        return $this->noview();
+        return $this->redirect("http://campaign-finance-pic.ronny.tw/{$table_id}/{$row}-{$col}.png");
     }
 }
