@@ -1,3 +1,7 @@
+<?php
+
+$list = array('序號', '交易日期', '收支科目', '捐贈者/支出對象', '身份證/統一編', '收入金額', '支出金額', '金錢類', '地址');
+?>
 <?= $this->partial('/common/header.phtml', $this) ?>
 API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/tables/<?= $this->table->id ?></code><br>
 檔案名稱: <?= $this->escape($this->table_meta->file) ?><br>
@@ -11,7 +15,12 @@ API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/tables/<?= $this->tab
     <?php for ($i = 0; $i < count($this->tables->cross_points[0]) - 1; $i ++) { ?>
     <tr>
         <?php for ($j = 0; $j < count($this->tables->cross_points) - 1; $j ++) { ?>
-        <td><button class="cell" data-row="<?= $i + 1 ?>" data-col="<?= $j + 1 ?>">(<?= $i + 1 ?>, <?= $j + 1 ?>)</button></td>
+        <td>
+            <button class="cell" data-row="<?= $i + 1 ?>" data-col="<?= $j + 1 ?>">(<?= $i + 1 ?>, <?= $j + 1 ?>)</button>
+            <?php if ($i == 0) { ?>
+            <?= $this->escape($list[$j]) ?>
+            <?php } ?>
+        </td>
         <?php } ?>
     </tr>
     <?php } ?>
