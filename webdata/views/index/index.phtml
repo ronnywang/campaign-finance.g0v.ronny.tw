@@ -1,4 +1,5 @@
 <?= $this->partial('/common/header.phtml', $this) ?>
+<div class="alert alert-warning">本站政治獻金資料收集僅供學術交流使用，嚴禁營利、徵信，或其他不正當目的之使用</div>
 API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code>
 <ol>
     <?php foreach (Table::getGroupedTables() as $file => $file_tables) { ?>
