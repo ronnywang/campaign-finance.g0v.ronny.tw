@@ -37,7 +37,7 @@ $('.cell').click(function(e){
 
 $.get('http://campaign-finance.g0v.ctiml.tw/api/getcells/<?= $this->table->id ?>', function(ret){
     for (var i = 0; i < ret.length; i ++) {
-        $('#val-' + ret[i].x + '-' + ret[i].y).text(ret[i].ans);
+        $('#val-' + ret[i].row + '-' + ret[i].col).text(ret[i].ans);
     }
 }, 'jsonp');
 </script>
