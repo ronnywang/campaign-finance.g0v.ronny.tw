@@ -52,6 +52,6 @@ class ApiController extends Pix_Controller
         $col = intval($col) - 1;
         $row = intval($row) - 1;
 
-        return $this->redirect("http://ronnywang-public.s3.amazonaws.com/opendata/campaign-finance/{$table_id}/{$row}-{$col}.png");
+        return $this->redirect("http://campaign-finance-pic.ronny.tw/{$table_id}/{$row}-{$col}.png");
     }
 }
