@@ -6,7 +6,7 @@ API 網址 : <code>http://<?= $_SERVER['HTTP_HOST'] ?>/api/gettables</code>
         <li><?= $this->escape($file) ?>
         <ul>
             <?php foreach ($file_tables as $page => $table) { ?>
-            <li><a href="/table/show/<?= $table->id ?>">第 <?= 1 + intval(json_decode($table->meta)->page) ?> 頁</a></li>
+            <li><a href="/table/show/<?= $table->id ?>">第 <?= intval(json_decode($table->meta)->page) ?> 頁</a></li>
             <?php } ?>
         </ul>
     <?php } ?>
